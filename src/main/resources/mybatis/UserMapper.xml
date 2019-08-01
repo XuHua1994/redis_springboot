@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fastech.dao.UserDAO">
+
+    <select id="queryAll" resultType="com.fastech.entity.User">
+        select * from t_user
+    </select>
+
+    <select id="findUserById" resultType="com.fastech.entity.User" parameterType="String">
+        select * from t_user where uid = #{id}
+    </select>
+
+    <update id="updateUser" parameterType="com.fastech.entity.User">
+        update t_user 
+        <trim prefix="set" suffixOverrides=",">
+            <if test="user.userName != null and user.userName != '' ">
+                username = #{user.userName},
+            </if>
+            <if test="user.passWord != null and user.passWord != ''">
+                password = #{user.passWord},
+            </if>
+            <if test="user.salary != 0">
+                salary = #{user.salary}
+            </if>
+        </trim>
+        where uid = #{user.uid}
+    </update>
+
+    <delete id="deleteUserById" parameterType="String">
+        delete from t_user where uid = #{id}
+    </delete>
+    
+    <insert id="insertUser" parameterType="com.fastech.entity.User">
+        insert t_user (uid,username,password,salary) values
+       (#{uid,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},
+       	#{password,jdbcType=VARCHAR},#{salary,jdbcType=NUMERIC})
+    </insert>
+
+	<select id="getLoginUser" resultType="com.fastech.entity.User">
+        select * from t_user where username=#{username} and password=#{password}
+    </select>
+	
+
+</mapper>
